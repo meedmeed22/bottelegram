@@ -1,3 +1,4 @@
+<?php
 class MyTmpTelegramBot
 {
     const BOT_TOKEN = "309491204:AAGe1Vwp3I7YWeQmBTfygfbaLh4_uCBrKt0";

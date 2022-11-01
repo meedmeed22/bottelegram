@@ -1,7 +1,7 @@
 <?php
 class MyTmpTelegramBot
 {
-    const BOT_TOKEN = "489256710:AAEVCOOZOZ7ZGW5M25whB60vlWugmYp_jKE";
+    const BOT_TOKEN = "309491204:AAGe1Vwp3I7YWeQmBTfygfbaLh4_uCBrKt0";
     const TELEGRAM_API_URL = "https://api.telegram.org/bot";
 
     public $url;

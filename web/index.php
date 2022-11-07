@@ -1,4 +1,5 @@
 <?php
+try{
 /**
  * Telegram Bot Example whitout WebHook.
  * It uses getUpdates Telegram's API.
@@ -42,4 +43,7 @@ for ($i = 0; $i < $telegram->UpdateCount(); $i++) {
         $content = ['chat_id' => $chat_id, 'text' => $reply];
         $telegram->sendMessage($content);
     }
+}
+}catch(Exception $e){
+    echo $e.' Moshkelll';
 }

@@ -1,35 +1,45 @@
 <?php
-class MyTmpTelegramBot
-{
-    const BOT_TOKEN = "489256710:AAEVCOOZOZ7ZGW5M25whB60vlWugmYp_jKE";
-    const TELEGRAM_API_URL = "https://api.telegram.org/bot";
+/**
+ * Telegram Bot Example whitout WebHook.
+ * It uses getUpdates Telegram's API.
+ *
+ * @author Gabriele Grillo <gabry.grillo@alice.it>
+ */
+include 'Telegram.php';
 
-    public $url;
+$bot_token = '310049340:AAFxXTn0aSt9iQRnkMoJJpWDSwF-bMqRDdM';
+$telegram = new Telegram($bot_token);
 
-    public function __construct()
-    {
-        $this->url = SELF::TELEGRAM_API_URL . SELF::BOT_TOKEN;
+// Get all the new updates and set the new correct update_id
+$req = $telegram->getUpdates();
+for ($i = 0; $i < $telegram->UpdateCount(); $i++) {
+    // You NEED to call serveUpdate before accessing the values of message in Telegram Class
+    $telegram->serveUpdate($i);
+    $text = $telegram->Text();
+    $chat_id = $telegram->ChatID();
+
+    if ($text == '/start') {
+        $reply = 'Working';
+        $content = ['chat_id' => $chat_id, 'text' => $reply];
+        $telegram->sendMessage($content);
     }
-
-    private function runScript($method)
-    {
-        return file_get_contents($this->url . '/'. $method);
+    if ($text == '/test') {
+        if ($telegram->messageFromGroup()) {
+            $reply = 'Chat Group';
+        } else {
+            $reply = 'Private Chat';
+        }
+        // Create option for the custom keyboard. Array of array string
+        $option = [['A', 'B'], ['C', 'D']];
+        // Get the keyboard
+        $keyb = $telegram->buildKeyBoard($option);
+        $content = ['chat_id' => $chat_id, 'reply_markup' => $keyb, 'text' => $reply];
+        $telegram->sendMessage($content);
     }
-
-    public function getUpdates()
-    {
-        return $this->runScript('getupdates');
-    }
-
-    public function sendMessage($chatId, $text)
-    {
-        $url = "sendmessage?text=$text&chat_id=$chatId";
-        return $this->runScript($url);
+    if ($text == '/git') {
+        $reply = 'Check me on GitHub: https://github.com/Eleirbag89/TelegramBotPHP';
+        // Build the reply array
+        $content = ['chat_id' => $chat_id, 'text' => $reply];
+        $telegram->sendMessage($content);
     }
 }
-
-$obj = new MyTmpTelegramBot();
-$updatesJson = $obj->getUpdates();
-$updatesJson2Array = json_decode($updatesJson, true);
-$chatId = $updatesJson2Array['result'][0]['message']['chat']['id'];
-$obj->sendMessage($chatId, 'Hi');
